@@ -28,13 +28,13 @@
         <nav class="navbar">
             <ul class="navbar__list container" id="top_navbar">
                 <li>
-                    <a href="index.html" class="navbar__link active">Tienda</a>
+                    <a href="index.html" class="navbar__link">Tienda</a>
                 </li>
                 <li>
                     <a href="publishItem.html" class="navbar__link">Publicacion</a>
                 </li>
                 <li>
-                    <a href="#" class="navbar__link">Usuarios</a>
+                    <a href="#" class="navbar__link active">Usuarios</a>
                 </li>
             </ul>
         </nav>
@@ -48,10 +48,78 @@
                 Administrador de usuarios
             </h2>
             <!-- Card  List -->
-            <ul class="card-list container" id="container-cards">
+            <ul class="users-list container" id="container-cards">
                 <!-- NOTE: Your generated images will appear here. -->
+                <div class="user-header">
+                    <p>Nombre</p>
+                    <p>Identificador</p>
+                    <p>Rol actual</p>
+                    <p style="width: 25%;">Modificador</p>
+                </div>
+                <div class="user-card">
+                    <p>Carlos</p>
+                    <p>8237g237g4</p>
+                    <p>Usuario</p>
+                    <form class="role-form">
+                        <div class="form__field select-wrapper">
+                            <select name="state" class="control" id="from-state">
+                                <option value="nuevo" selected>Usuario</option>
+                                <option value="usado">Moderador</option>
+                                <option value="desgastado">Administrador</option>
+                            </select>
+                        </div>
 
-                <!-- Default element. -->
+                        <button type="submit" class="control">Modificar</button>
+                    </form>
+                </div>
+                <div class="user-card">
+                    <p>Carlos</p>
+                    <p>8237g237g4</p>
+                    <p>Usuario</p>
+                    <form class="role-form">
+                        <div class="form__field select-wrapper">
+                            <select name="state" class="control" id="from-state">
+                                <option value="nuevo" selected>Usuario</option>
+                                <option value="usado">Moderador</option>
+                                <option value="desgastado">Administrador</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="control">Modificar</button>
+                    </form>
+                </div>
+                <div class="user-card">
+                    <p>Carlos</p>
+                    <p>8237g237g4</p>
+                    <p>Usuario</p>
+                    <form class="role-form">
+                        <div class="form__field select-wrapper">
+                            <select name="state" class="control" id="from-state">
+                                <option value="nuevo" selected>Usuario</option>
+                                <option value="usado">Moderador</option>
+                                <option value="desgastado">Administrador</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="control">Modificar</button>
+                    </form>
+                </div>
+                <div class="user-card">
+                    <p>Carlos</p>
+                    <p>8237g237g4</p>
+                    <p>Usuario</p>
+                    <form class="role-form">
+                        <div class="form__field select-wrapper">
+                            <select name="state" class="control" id="from-state">
+                                <option value="nuevo" selected>Usuario</option>
+                                <option value="usado">Moderador</option>
+                                <option value="desgastado">Administrador</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="control">Modificar</button>
+                    </form>
+                </div>
             </ul>
         </section>
     </main>
@@ -60,7 +128,7 @@
     <div id="loading-overlay" class="loading-overlay">
         <img src="./assets/images/loading.gif" alt="Loading..." />
     </div>
-    
+
 </body>
 
 </html>
