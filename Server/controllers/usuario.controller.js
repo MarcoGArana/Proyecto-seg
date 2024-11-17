@@ -2,6 +2,7 @@ const { createToken, verifyToken } = require("../utils/jwt.tools");
 const crypto = require("../utils/crypto")
 const Roles = require("../data/roles.constant.json");
 const mysql = require("mysql");
+const validator = require("../validators/usuario.validator")
 const { bodyParser } = require("../utils/bodyparser");
 require('dotenv').config();
 const controller = {};
@@ -15,6 +16,9 @@ const con = mysql.createPool({
 controller.register = async (req, res) => {
     try {
         await bodyParser(req);
+        if(!validator.register(req,res)){
+            return
+        }
         const { nombre, correo, password, telefono } = req.body;
         let user;
         let sql = "SELECT * FROM USUARIO WHERE nombre = " + mysql.escape(nombre) + "OR correo =" + mysql.escape(correo);

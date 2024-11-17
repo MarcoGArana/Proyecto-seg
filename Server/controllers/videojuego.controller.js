@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 const { bodyParser } = require("../utils/bodyparser");
+const validators = require("../validators/videojuego.validator")
 require('dotenv').config();
 const rol = require("../data/roles.constant.json")
 const controller = {};
@@ -28,6 +29,9 @@ controller.delete = async (req, res) => {
   try {
     const { url } = req;
     const id = url.split("?")[1].split("=")[1];
+    if(!validators.idInParamsValidator(id)){
+      return
+    }
     let sql;
     sql = "SELECT VIDEOJUEGO.id, VIDEOJUEGO.nombre, VIDEOJUEGO.descripcion, ESTADO.estado, VIDEOJUEGO.imagen, VIDEOJUEGO.precio,USUARIO.nombre AS 'usuario',USUARIO.correo,USUARIO.telefono, CATEGORIA.categoria FROM VIDEOJUEGO, USUARIO, ESTADO, CATEGORIA_VIDEOJUEGO, CATEGORIA WHERE VIDEOJUEGO.nombre_usuario = USUARIO.nombre AND ESTADO.id = VIDEOJUEGO.id_estado AND CATEGORIA_VIDEOJUEGO.id_categoria = CATEGORIA.id AND CATEGORIA_VIDEOJUEGO.id_videojuego = VIDEOJUEGO.id AND VIDEOJUEGO.id = " + mysql.escape(id);
     const _videogame = await new Promise((resolve, reject) => con.query(sql, function (err, result) {
@@ -69,6 +73,9 @@ controller.save = async (req, res) => {
   try {
     const { url } = req;
     await bodyParser(req);
+    if(!validators.createVideogameValidator(req,res)){
+      return
+    }
     if (url.split("=")[0] + "=" == "/videogame?id=") {
       const id = url.split("?")[1].split("=")[1];
       let sql = "SELECT VIDEOJUEGO.id, VIDEOJUEGO.nombre, VIDEOJUEGO.descripcion, ESTADO.estado, VIDEOJUEGO.imagen, VIDEOJUEGO.precio,USUARIO.nombre AS 'usuario',USUARIO.correo,USUARIO.telefono, CATEGORIA.categoria FROM VIDEOJUEGO, USUARIO, ESTADO, CATEGORIA_VIDEOJUEGO, CATEGORIA WHERE VIDEOJUEGO.nombre_usuario = USUARIO.nombre AND ESTADO.id = VIDEOJUEGO.id_estado AND CATEGORIA_VIDEOJUEGO.id_categoria = CATEGORIA.id AND CATEGORIA_VIDEOJUEGO.id_videojuego = VIDEOJUEGO.id AND VIDEOJUEGO.id = " + mysql.escape(id);
