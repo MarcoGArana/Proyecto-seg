@@ -41,7 +41,7 @@ controller.delete = async (req, res) => {
       return resolve(result[0]);
     }));
     if ((rol.ADMIN == req.user.rol) || (rol.SYSADMIN == req.user.rol) || (req.user.nombre == _videogame.usuario)) {
-      sql = "DELETE FROM categoria_videojuego WHERE id_videojuego=" + mysql.escape(id);
+      sql = "DELETE FROM CATEGORIA_VIDEOJUEGO WHERE id_videojuego=" + mysql.escape(id);
       con.query(sql, function (err, result) {
         if (err) {
           res.writeHead(409, { "content-type": "application/json" });
@@ -93,7 +93,7 @@ controller.save = async (req, res) => {
         return resolve(result[0]);
       }));
       if (req.user.nombre == _videogame.usuario) {
-        sql = "UPDATE videojuego, categoria_videojuego SET videojuego.descripcion=" + mysql.escape(req.body.descripcion) + ", videojuego.id_estado=" + mysql.escape(req.body.estado) + ", videojuego.imagen=" + mysql.escape(req.body.imagen) + ", videojuego.nombre=" + mysql.escape(req.body.nombre) + ", videojuego.precio=" + mysql.escape(req.body.precio) + ", categoria_videojuego.id_categoria=" + mysql.escape(req.body.categoria) + " WHERE videojuego.id=" + mysql.escape(id) + " AND categoria_videojuego.id_videojuego=" + mysql.escape(id);
+        sql = "UPDATE VIDEOJUEGO, CATEGORIA_VIDEOJUEGO SET VIDEOJUEGO.descripcion=" + mysql.escape(req.body.descripcion) + ", VIDEOJUEGO.id_estado=" + mysql.escape(req.body.estado) + ", VIDEOJUEGO.imagen=" + mysql.escape(req.body.imagen) + ", VIDEOJUEGO.nombre=" + mysql.escape(req.body.nombre) + ", VIDEOJUEGO.precio=" + mysql.escape(req.body.precio) + ", CATEGORIA_VIDEOJUEGO.id_categoria=" + mysql.escape(req.body.categoria) + " WHERE VIDEOJUEGO.id=" + mysql.escape(id) + " AND CATEGORIA_VIDEOJUEGO.id_videojuego=" + mysql.escape(id);
         con.query(sql, function (err, result) {
           if (err) {
             res.writeHead(409, { "content-type": "application/json" });
@@ -115,7 +115,7 @@ controller.save = async (req, res) => {
       }
     } else if (url == "/videogame/") {
       let sql = "";
-      sql = "INSERT INTO VIDEOJUEGO(descripcion, id_estado, nombre, imagen, precio, nombre_usuario) VALUES  (" + mysql.escape(req.body.descripcion) + "," + mysql.escape(req.body.estado) + "," + mysql.escape(req.body.nombre) + "," + mysql.escape(req.body.imagen) + "," + mysql.escape(req.body.precio) + "," + mysql.escape(req.user.nombre) + ")";
+      sql = "INSERT INTO VIDEOJUEGO(descripcion, id_estado, nombre, imagen, precio, nombre_usuario) VALUES  (" + mysql.escape(req.body.descripcion) + "," + mysql.escape(req.body.estado) + "," + mysql.escape(req.body.nombre) + "," + mysql.escape(req.body.imagen) + "," + mysql.escape(req.body.precio) + "," + mysql.escape(req.user.nombre) + ");";
       const _videogame = await new Promise((resolve, reject) => con.query(sql, function (err, result) {
         if (err) {
           return reject("");
@@ -130,7 +130,7 @@ controller.save = async (req, res) => {
         res.end();
         return
       }
-      sql = "INSERT INTO categoria_videojuego(id_categoria, id_videojuego) VALUES(" + mysql.escape(req.body.categoria) + "," + mysql.escape(_videogame.insertId) + ");";
+      sql = "INSERT INTO CATEGORIA_VIDEOJUEGO(id_categoria, id_videojuego) VALUES(" + mysql.escape(req.body.categoria) + "," + mysql.escape(_videogame.insertId) + ");";
       con.query(sql, function (err, result) {
         if (err) {
           res.writeHead(409, { "content-type": "application/json" });
