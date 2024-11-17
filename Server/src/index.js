@@ -70,7 +70,12 @@ const server = http.createServer(async (req, res) => {
         default:
             break;
     }
-
+    process.on('uncaughtException', function (error) {
+        // handle the error
+        res.writeHead(500, { "content-type": "application/json" });
+        res.write(JSON.stringify({ message: "Internal server error" }));
+        res.end();
+    });
 })
 
 server.listen(process.env.PORT);

@@ -15,7 +15,9 @@ const con = mysql.createPool({
 
 controller.register = async (req, res) => {
     try {
-        await bodyParser(req);
+        if(!(await bodyParser(req,res))){
+            return
+          }
         if(!validator.register(req,res)){
             return
         }
@@ -54,7 +56,9 @@ controller.register = async (req, res) => {
 controller.login = async (req, res) => {
     try {
         // identificador: usuario o correo
-        await bodyParser(req);
+        if(!(await bodyParser(req,res))){
+            return
+          }
         const { identifier, password } = req.body;
 
         let user;
@@ -129,7 +133,9 @@ controller.whoAmI = async (req, res) => {
 
 controller.toogleRol = async (req, res) => {
     try {
-        await bodyParser(req);
+        if(!(await bodyParser(req,res))){
+            return
+          }
         let sql = "SELECT * FROM USUARIO WHERE nombre = " + mysql.escape(req.body.nombre);
         const user = await new Promise((resolve, reject) => con.query(sql, function (err, result) {
             if (err) return reject(err);
