@@ -1,5 +1,5 @@
 const validators = {};
-const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+const base64regex = /^data:image\/(jpeg|png|jpg);base64,([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 const idRegex = /^[0-9]*$/;
 validators.idInParamsValidator = (id,req,res) => {
     if (id) {

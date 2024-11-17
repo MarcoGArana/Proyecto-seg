@@ -4,15 +4,17 @@ let photoLabel = null;
 let userRole = null;
 let form = null;
 let base64Image = null;
+let userName = null;
 //From fields
-let titleInput, phoneInput, descriptionInput, imageUploadInput, priceInput, stateInput = null;
+let titleInput, descriptionInput, imageUploadInput, priceInput, stateInput, categoryInput = null;
 
-const baseUrl = "http://127.0.0.1:5500/GameStore/assets";
+const baseUrl = "http://127.0.0.1:3000";
+const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb21hMjAzIiwiZXhwIjoxNzMxODk4NDkzLCJpYXQiOjE3MzE4MTIwOTN9.ktdZudPhmIwKIyoc1O_Vf9F2JviBJ7LXa4B_LP0E8wc";
 
 const bindElements = () => {
     formContainer = document.querySelector("#form-container");
     loadingOverlay = document.getElementById("loading-overlay");
-
+    userName = document.getElementById("user-name");
 }
 
 const bindFormElements = () => {
@@ -20,10 +22,10 @@ const bindFormElements = () => {
     imageUploadInput = document.getElementById("from-photo");
     photoLabel = document.getElementById("photo-holder");
     titleInput = document.getElementById("from-tittle");
-    phoneInput = document.getElementById("from-cellphone");
     descriptionInput = document.getElementById("from-description");
     priceInput = document.getElementById("from-price");
     stateInput = document.getElementById("from-state");
+    categoryInput = document.getElementById("from-category");
 }
 
 const addEventListeners = () => {
@@ -49,29 +51,24 @@ const addEventListeners = () => {
         // Obtenemos el archivo cargado
         const file = imageUploadInput.files[0];
         const title = titleInput.value;
-        const phone = phoneInput.value;
         const description = descriptionInput.value;
         const price = priceInput.value;
-        const state = stateInput.value;
+        const state = stateInput.selectedIndex;
+        const category = categoryInput.selectedIndex;
         
         // Verificamos si se seleccionó un archivo
-        if (!file || !title || !phone || !description || !price || (state != 'nuevo' && state != 'usado' && state != 'desgastado')) {
+        if (!file || !title || !description || !price || state < 1 || state > 3 || category < 1 || category > 18) {
             alert('Por favor, complete todos los campos');
             return;
         }
 
         // Definimos el regex para solo letras
         const checkTitle = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9\s]+$/;
-        const phoneRegex = /^\+?(\d{1,3})?[-.\s]?(\(?\d{2,3}\)?)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
         const priceRegex = /^\d*(\.\d+)?$/;
         const descRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñÜü0-9.,!?\s'-]*$/
 
         if(!checkTitle.test(title)){
             alert('El titulo solo admite letras y numeros');
-            return;
-        }
-        if(!phoneRegex.test(phone)){
-            alert('Numero de telefono no valido');
             return;
         }
         if(!descRegex.test(description)){
@@ -91,15 +88,49 @@ const addEventListeners = () => {
         }
 
         const formData = {
-            title: title,
-            phone: phone,
-            description: description,
-            price: price,
-            image: base64Image,
-            state: state
+            nombre: title,
+            descripcion: description,
+            precio: parseFloat(price),
+            imagen: base64Image,
+            estado: state,
+            categoria: category
         }
 
-        console.log(formData);
+        try {
+            loading(false);
+            const urlWithParams = `${baseUrl}/videogame/`;
+            const response = await fetch(urlWithParams, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+    
+            if (response.ok) {
+    
+                const userData = await response.json(); // Parse the response as JSON
+                userRole = userData.role;
+                userName.innerText = userData.nombre;
+                loading(true);
+    
+            } else if (response.status === 400 || response.status === 404) {
+    
+                // Throws an error with the API's error message.
+                const errorData = await response.json();
+                throw new Error(`The request was not successful: ${errorData.msg}`);
+    
+            } else {
+    
+                // Throws a general error 
+                throw new Error(`The request was not successful`);
+            }
+        } catch (error) {
+            loading(true);
+            showErrorAlert(error);                      // Display an error using a function declared later
+            console.error("An error occurred:", error); // Show the error in the console
+        }        
     });
 }
 
@@ -134,7 +165,6 @@ const displayForm = () => {
     const imgUrl = sanitizeHTML(url.searchParams.get("imgUrl") || "");
     const description = sanitizeHTML(url.searchParams.get("description") || "");
     const gameId = sanitizeHTML(url.searchParams.get("gameId") || "");
-    const phone = sanitizeHTML(url.searchParams.get("phone") || "");
     const state = sanitizeHTML(url.searchParams.get("gameState") || "Estado");
     const action = sanitizeHTML(url.searchParams.get("action") || "Publicar");
     const formTitle = action == "Publicar" ? "Publica tus juegos para venderlos" : "Modifica tus publicaciones";
@@ -152,18 +182,6 @@ const displayForm = () => {
                         value="${title}"
                         required
                         /> 
-                    </div>
-                    
-                    <div  class="form__field">
-                        <input
-                            type="text"
-                            id="from-cellphone"
-                            name="from-cellphone"
-                            class="control"
-                            placeholder="Telefono de contacto"
-                            value="${phone}"
-                            required
-                        />
                     </div>
 
                     <div class="form__field">
@@ -263,13 +281,22 @@ const showErrorAlert = (msg) => {
 
 const getUserData = async () => {
     try {
-        const urlWithParams = `${baseUrl}/user.json`;
-        const response = await fetch(urlWithParams);
+        loading(false);
+        const urlWithParams = `${baseUrl}/whoami/`;
+        const response = await fetch(urlWithParams, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
 
         if (response.ok) {
 
             const userData = await response.json(); // Parse the response as JSON
             userRole = userData.role;
+            userName.innerText = userData.nombre;
+            loading(true);
 
         } else if (response.status === 400 || response.status === 404) {
 
@@ -283,6 +310,7 @@ const getUserData = async () => {
             throw new Error(`The request was not successful`);
         }
     } catch (error) {
+        loading(true);
         showErrorAlert(error);                      // Display an error using a function declared later
         console.error("An error occurred:", error); // Show the error in the console
     }
@@ -302,8 +330,8 @@ function convertToBase64(file) {
 }
 
 const main = () => {
-    getUserData();
     bindElements();
+    getUserData();
     displayForm();
     bindFormElements();
     addEventListeners();

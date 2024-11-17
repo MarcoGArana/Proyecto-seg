@@ -1,13 +1,15 @@
 let cardsContainer = null;
 let loadingOverlay = null;
-let userRole = null;
+let userRol = null;
+let userName = null;
 
-const baseUrl = "http://127.0.0.1:5500/GameStore/assets";
-const API_KEY = "";
+const baseUrl = "http://127.0.0.1:3000";
+const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb21hMjAzIiwiZXhwIjoxNzMxODk4NDkzLCJpYXQiOjE3MzE4MTIwOTN9.ktdZudPhmIwKIyoc1O_Vf9F2JviBJ7LXa4B_LP0E8wc";
 
 const bindElements = () => {
     cardsContainer = document.querySelector("#container-cards");
     loadingOverlay = document.getElementById("loading-overlay");
+    userName = document.getElementById("user-name");
 }
 
 const addEventListeners = () => {
@@ -26,11 +28,19 @@ const loading = (complete) => {
 
 const getGames = async () => {
 
-    const urlWithParams = `${baseUrl}/games.json`;
+    const urlWithParams = `${baseUrl}/videogame/`;
 
     try {
         // try code
-        const response = await fetch(urlWithParams);
+        loading(false);
+        const response = await fetch(urlWithParams, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'content-Type': 'application/json',
+            },
+        });
+
         if (response.ok) {
             const data = await response.json(); // Parse the response as JSON
             loading(true);                      // Hide the loading overlay
@@ -70,20 +80,20 @@ const displayData = (data) => {
     data.forEach((element) => {
         // Build the HTML for each card
 
-        const encodedDescription = encodeURIComponent(element.description);
-        const permission = userRole == "admin" ? "block" : "none";
-        const deleteFunc = userRole == "admin" ? `deleteCard({id: '${element.id}'})` : "";
+        const encodedDescription = encodeURIComponent(element.descripcion);
+        const permission = userRol == "admin" ? "block" : "none";
+        const deleteFunc = userRol == "admin" ? `deleteCard({id: '${element.id}'})` : "";
 
         cardsHTML += `<div class="card" id="card-${element.id}">
-          <img src="${element.image}" alt="Game image">
+          <img src="${element.imagen}" alt="Game image">
           <div id="card-info">
-            <a href="gameInfo.html?description=${encodedDescription}&title=${element.title}&imgUrl=${element.image}&price=${element.price}&phone=${element.phone}&gameState=${element.state}" class="card__link">
-            ${element.title}
+            <a href="gameInfo.html?id=${element.id}" class="card__link">
+            ${element.nombre}
             </a>
             <div class="card__data">
               <div>
-                <p class="price">${element.price}</p>
-                <p class="phone">Contact: ${element.phone}</p>
+                <p class="price">$${element.precio}</p>
+                <p class="phone">Contact: ${element.telefono}</p>
               </div>
               <div class="card-actions">
                 <img src="./assets/images/delete.svg" alt="delete-button" class="delete-${element.id}" id="delete" onclick="${deleteFunc}" style="display: ${permission}">
@@ -97,14 +107,38 @@ const displayData = (data) => {
 }
 
 const deleteCard = async ({id}) => {
-    try {
-        if(userRole == "admin"){
-            const card = document.querySelector("#card-".concat(id));
-            card.style.display = "none";
+    const urlWithParams = `${baseUrl}/videogame?id=${id}`;
+    loading(false);
 
-            // TODO: delete game from database
+    try {
+        if(userRol == "admin"){
+            const response = await fetch(urlWithParams, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.ok) {
+                const card = document.querySelector("#card-".concat(id));
+                card.style.display = "none";
+                loading(true);
+    
+            } else if (response.status === 400 || response.status === 404) {
+    
+                // Throws an error with the API's error message.
+                const errorData = await response.json();
+                throw new Error(`The request was not successful: ${errorData.msg}`);
+    
+            } else {
+    
+                // Throws a general error 
+                throw new Error(`The request was not successful`);
+            }
         }
     } catch (error) {
+        loading(true);
         showErrorAlert(error);                      // Display an error using a function declared later
         console.error("An error occurred:", error); // Show the error in the console
     }
@@ -117,13 +151,21 @@ const showErrorAlert = (msg) => {
 
 const getUserData = async () => {
     try {
-        const urlWithParams = `${baseUrl}/user.json`;
-        const response = await fetch(urlWithParams);
+        loading(false);
+        const urlWithParams = `${baseUrl}/whoami/`;
+        const response = await fetch(urlWithParams, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
 
         if (response.ok) {
 
             const userData = await response.json(); // Parse the response as JSON
-            userRole = userData.role;
+            userRol = userData.rol;
+            userName.innerText = userData.nombre;
 
         } else if (response.status === 400 || response.status === 404) {
 
@@ -137,14 +179,15 @@ const getUserData = async () => {
             throw new Error(`The request was not successful`);
         }
     } catch (error) {
+        loading(true);
         showErrorAlert(error);                      // Display an error using a function declared later
         console.error("An error occurred:", error); // Show the error in the console
     }
 }
 
 const main = () => {
-    getUserData();
     bindElements();
+    getUserData();
     addEventListeners();
     getGames();
 }
