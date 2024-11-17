@@ -29,7 +29,7 @@ controller.delete = async (req, res) => {
   try {
     const { url } = req;
     const id = url.split("?")[1].split("=")[1];
-    if(!validators.idInParamsValidator(id)){
+    if(!validators.idInParamsValidator(id,req,res)){
       return
     }
     let sql;
@@ -78,6 +78,9 @@ controller.save = async (req, res) => {
     }
     if (url.split("=")[0] + "=" == "/videogame?id=") {
       const id = url.split("?")[1].split("=")[1];
+      if(!validators.idInParamsValidator(id,req,res)){
+        return
+      }
       let sql = "SELECT VIDEOJUEGO.id, VIDEOJUEGO.nombre, VIDEOJUEGO.descripcion, ESTADO.estado, VIDEOJUEGO.imagen, VIDEOJUEGO.precio,USUARIO.nombre AS 'usuario',USUARIO.correo,USUARIO.telefono, CATEGORIA.categoria FROM VIDEOJUEGO, USUARIO, ESTADO, CATEGORIA_VIDEOJUEGO, CATEGORIA WHERE VIDEOJUEGO.nombre_usuario = USUARIO.nombre AND ESTADO.id = VIDEOJUEGO.id_estado AND CATEGORIA_VIDEOJUEGO.id_categoria = CATEGORIA.id AND CATEGORIA_VIDEOJUEGO.id_videojuego = VIDEOJUEGO.id AND VIDEOJUEGO.id = " + mysql.escape(id);
     const _videogame = await new Promise((resolve, reject) => con.query(sql, function (err, result) {
       if (err) return reject(err);

@@ -1,16 +1,23 @@
 const validators = {};
 const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-validators.idInParamsValidator = (id) => {
+const idRegex = /^[0-9]*$/;
+validators.idInParamsValidator = (id,req,res) => {
     if (id) {
-        if (!Number.isInteger(id)) {
+        if (id=="") {
             res.writeHead(409, { "content-type": "application/json" });
-            res.write(JSON.stringify({ message: "El id tiene que ser un numero entero" }));
+            res.write(JSON.stringify({ message: "Es necesario un id" }));
             res.end();
             return false
         }
-        if (id <= 0) {
+        if (id=="0") {
             res.writeHead(409, { "content-type": "application/json" });
-            res.write(JSON.stringify({ message: "El id tiene que ser un numero positivo" }));
+            res.write(JSON.stringify({ message: "El id no pude ser 0" }));
+            res.end();
+            return false
+        }
+        if (!idRegex.test(id)) {
+            res.writeHead(409, { "content-type": "application/json" });
+            res.write(JSON.stringify({ message: "El id tiene que ser una cadena de numeros" }));
             res.end();
             return false
         }
