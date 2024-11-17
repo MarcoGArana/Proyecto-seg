@@ -210,6 +210,34 @@ const displayForm = () => {
 
                     <div class="form__field select-wrapper">
                         <select 
+                            name="category" 
+                            class="control"
+                            id="from-category"
+                        >
+                            <option value="" disabled selected hidden>Selecciona un género</option>
+                            <option value="accion">Acción</option>
+                            <option value="aventura">Aventura</option>
+                            <option value="aventura-grafica">Aventura Gráfica</option>
+                            <option value="rpg">RPG (Role-Playing Games)</option>
+                            <option value="shooter">Shooter</option>
+                            <option value="plataformas">Plataformas</option>
+                            <option value="deportes">Deportes</option>
+                            <option value="simulacion">Simulación</option>
+                            <option value="estrategia">Estrategia</option>
+                            <option value="lucha">Lucha</option>
+                            <option value="horror">Horror</option>
+                            <option value="musica-ritmo">Música y Ritmo</option>
+                            <option value="sandbox">Sandbox o Mundo Abierto</option>
+                            <option value="multijugador-en-linea">Multijugador en línea</option>
+                            <option value="vr">Realidad Virtual (VR)</option>
+                            <option value="survival">Survival</option>
+                            <option value="party-games">Party Games</option>
+                            <option value="puzzle">Puzzle</option>
+                        </select>
+                    </div>
+
+                    <div class="form__field select-wrapper">
+                        <select 
                             name="state" 
                             class="control"
                             id="from-state"
