@@ -80,8 +80,7 @@ const displayData = (data) => {
     // Determine the media URL based on the media_type
     data.forEach((element) => {
         if (element.correo == userData.correo && element.usuario == userData.nombre && element.telefono == userData.telefono) {
-            const encodedDescription = encodeURIComponent(element.descripcion);
-            const editDirection = `publishItem.html?description=${encodedDescription}&title=${element.nombre}&gameId=${element.id}&action=Save&imgUrl=${element.imagen}&price=${element.precio}&phone=${element.telefono}&gameState=${element.estado}`
+            const editDirection = `publishItem.html?id=${element.id}`
 
             cardsHTML += 
             `<div class="card" id="card-${element.id}">
