@@ -32,6 +32,12 @@ const server = http.createServer(async (req, res) => {
                 if (await auth.authentication(req, res)) {
                     user.whoAmI(req, res);
                 }
+            } else if(url.split("=")[0] + "=" == "/videogame?id="){
+                if (await auth.authentication(req, res)) {
+                    if (auth.authorization(req, res, rol.USER, rol.ADMIN)) {
+                        videojuego.selectOne(req, res);
+                    }
+                }
             }
 
             break;
