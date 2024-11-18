@@ -27,6 +27,26 @@ controller.selectAll = async (req, res) => {
     res.end();
   }
 }
+controller.selectOne = async (req, res) => {
+  try {
+    const { url } = req;
+    const id = url.split("?")[1].split("=")[1];
+    if (!validators.idInParamsValidator(id, req, res)) {
+      return
+    }
+    const sql = "SELECT VIDEOJUEGO.id, VIDEOJUEGO.nombre, VIDEOJUEGO.descripcion, ESTADO.estado, VIDEOJUEGO.imagen, VIDEOJUEGO.precio,USUARIO.nombre AS 'usuario',USUARIO.correo,USUARIO.telefono, CATEGORIA.categoria FROM VIDEOJUEGO, USUARIO, ESTADO, CATEGORIA_VIDEOJUEGO, CATEGORIA WHERE VIDEOJUEGO.nombre_usuario = USUARIO.nombre AND ESTADO.id = VIDEOJUEGO.id_estado AND CATEGORIA_VIDEOJUEGO.id_categoria = CATEGORIA.id AND CATEGORIA_VIDEOJUEGO.id_videojuego = VIDEOJUEGO.id AND VIDEOJUEGO.id="+mysql.escape(id);
+    con.query(sql, function (err, result) {
+      if (err) throw err;
+      res.writeHead(200, { "content-type": "application/json" });
+      res.write(JSON.stringify(result));
+      res.end();
+    });
+  } catch (error) {
+    res.writeHead(500, { "content-type": "application/json" });
+    res.write(JSON.stringify({ message: "Internal server error" }));
+    res.end();
+  }
+}
 controller.delete = async (req, res) => {
   try {
     const { url } = req;

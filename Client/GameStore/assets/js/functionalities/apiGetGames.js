@@ -4,7 +4,7 @@ let userRol = null;
 let userName = null;
 
 const baseUrl = "http://127.0.0.1:3000";
-const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb21hMjAzIiwiZXhwIjoxNzMxODk4NDkzLCJpYXQiOjE3MzE4MTIwOTN9.ktdZudPhmIwKIyoc1O_Vf9F2JviBJ7LXa4B_LP0E8wc";
+const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWV2byIsImV4cCI6MTczMTk3NDQwNiwiaWF0IjoxNzMxODg4MDA2fQ.EXjma5tMz3Y2dEaAuWGG7X2Aq3xppDY7Hbz8m95e5mA";
 
 const bindElements = () => {
     cardsContainer = document.querySelector("#container-cards");

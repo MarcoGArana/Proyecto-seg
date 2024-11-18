@@ -32,6 +32,12 @@ const server = http.createServer(async (req, res) => {
                 if (await auth.authentication(req, res)) {
                     user.whoAmI(req, res);
                 }
+            } else if(url.split("=")[0] + "=" == "/videogame?id="){
+                if (await auth.authentication(req, res)) {
+                    if (auth.authorization(req, res, rol.USER, rol.ADMIN)) {
+                        videojuego.selectOne(req, res);
+                    }
+                }
             }
 
             break;
@@ -70,12 +76,6 @@ const server = http.createServer(async (req, res) => {
         default:
             break;
     }
-    process.on('uncaughtException', function (error) {
-        // handle the error
-        res.writeHead(500, { "content-type": "application/json" });
-        res.write(JSON.stringify({ message: "Internal server error" }));
-        res.end();
-    });
 })
 
 server.listen(process.env.PORT);

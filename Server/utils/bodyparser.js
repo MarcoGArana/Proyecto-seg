@@ -1,5 +1,5 @@
 async function bodyParser(req, res) {
-    return await new Promise((resolve, reject) => {
+    const bool = await new Promise((resolve, reject) => {
         try {
             let totalData = "";
             req
@@ -7,8 +7,14 @@ async function bodyParser(req, res) {
                     totalData += chunk;
                 })
                 .on("end", () => {
-                    req.body = JSON.parse(totalData);
-                    return resolve(true);
+                    try{
+                        req.body = JSON.parse(totalData);
+                        return resolve(true);
+                    }catch{
+                        res.writeHead(409, { "content-type": "application/json" });
+                        res.write(JSON.stringify({ message: "Datos recibidos de forma incorrecta" }));
+                        res.end();
+                    }
                 })
                 .on('error', err => {
                     console.log(error);
@@ -17,13 +23,14 @@ async function bodyParser(req, res) {
                     res.end();
                     return reject(false);
                 })
-        } catch {
+        } catch(error) {
             res.writeHead(409, { "content-type": "application/json" });
             res.write(JSON.stringify({ message: "Datos recibidos de forma incorrecta" }));
             res.end();
             return reject(false);
         }
     })
+    return bool;
 }
 
 module.exports = { bodyParser };

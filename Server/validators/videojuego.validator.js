@@ -39,9 +39,9 @@ validators.createVideogameValidator = (req, res) => {
             res.end();
             return false
         }
-        if (estado <= 0) {
+        if ((estado < 1) || (estado>3)) {
             res.writeHead(409, { "content-type": "application/json" });
-            res.write(JSON.stringify({ message: "El estado tiene que ser un numero positivo" }));
+            res.write(JSON.stringify({ message: "El estado tiene que ser un numero entre 1 y 3" }));
             res.end();
             return false
         }
@@ -59,9 +59,9 @@ validators.createVideogameValidator = (req, res) => {
             res.end();
             return false
         }
-        if (categoria <= 0) {
+        if ((categoria < 1) || (categoria>18)) {
             res.writeHead(409, { "content-type": "application/json" });
-            res.write(JSON.stringify({ message: "La categoria tiene que ser un numero positivo" }));
+            res.write(JSON.stringify({ message: "La categoria tiene que ser un numero entre 1 y 18" }));
             res.end();
             return false
         }
