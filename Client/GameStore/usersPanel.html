@@ -20,7 +20,7 @@
             <div class="header__wrapper">
                 <img src="./assets/images/logoFull.svg" style="max-width: 12rem;" alt="enebaLogo">
                 <a href="profile.html">
-                    <h3>ElDiablo503</h3>
+                    <h3 id="user-name"></h3>
                 </a>
             </div>
 
@@ -39,89 +39,22 @@
             </ul>
         </nav>
     </header>
+
     <!-- Main -->
-    <main>
+    <main id="form-container" class="controls container">
         <!-- Controls menu -->
-
-        <section class="image-section" role="status" aria-live="polite" aria-relevant="additions">
-            <h2 class="sr-only">
-                Administrador de usuarios
-            </h2>
-            <!-- Card  List -->
-            <ul class="users-list container" id="container-cards">
-                <!-- NOTE: Your generated images will appear here. -->
-                <div class="user-header">
-                    <p>Nombre</p>
-                    <p>Identificador</p>
-                    <p>Rol actual</p>
-                    <p style="width: 25%;">Modificador</p>
-                </div>
-                <div class="user-card">
-                    <p>Carlos</p>
-                    <p>8237g237g4</p>
-                    <p>Usuario</p>
-                    <form class="role-form">
-                        <div class="form__field select-wrapper">
-                            <select name="state" class="control" id="from-state">
-                                <option value="nuevo" selected>Usuario</option>
-                                <option value="usado">Moderador</option>
-                                <option value="desgastado">Administrador</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="control">Modificar</button>
-                    </form>
-                </div>
-                <div class="user-card">
-                    <p>Carlos</p>
-                    <p>8237g237g4</p>
-                    <p>Usuario</p>
-                    <form class="role-form">
-                        <div class="form__field select-wrapper">
-                            <select name="state" class="control" id="from-state">
-                                <option value="nuevo" selected>Usuario</option>
-                                <option value="usado">Moderador</option>
-                                <option value="desgastado">Administrador</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="control">Modificar</button>
-                    </form>
-                </div>
-                <div class="user-card">
-                    <p>Carlos</p>
-                    <p>8237g237g4</p>
-                    <p>Usuario</p>
-                    <form class="role-form">
-                        <div class="form__field select-wrapper">
-                            <select name="state" class="control" id="from-state">
-                                <option value="nuevo" selected>Usuario</option>
-                                <option value="usado">Moderador</option>
-                                <option value="desgastado">Administrador</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="control">Modificar</button>
-                    </form>
-                </div>
-                <div class="user-card">
-                    <p>Carlos</p>
-                    <p>8237g237g4</p>
-                    <p>Usuario</p>
-                    <form class="role-form">
-                        <div class="form__field select-wrapper">
-                            <select name="state" class="control" id="from-state">
-                                <option value="nuevo" selected>Usuario</option>
-                                <option value="usado">Moderador</option>
-                                <option value="desgastado">Administrador</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="control">Modificar</button>
-                    </form>
-                </div>
-            </ul>
-        </section>
+        
+        <h2>
+            Administrador de usuarios
+        </h2>
+        <form id="form" class="form">
+            <div class="form__field">
+                <input type="text" id="from-name" name="from-name" class="control" placeholder="User Name"
+                required />
+            </div>
+    
+            <button type="submit" class="control">Modificar rol</button>
+        </form>
     </main>
 
     <!-- Loading GIF div -->
@@ -129,6 +62,7 @@
         <img src="./assets/images/loading.gif" alt="Loading..." />
     </div>
 
+    <script src="./assets/js/functionalities/handleUsers.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,6 @@
 let cardsContainer = null;
 let loadingOverlay = null;
+let navbar = null;
 let userRol = null;
 let userName = null;
 
@@ -10,6 +11,7 @@ const bindElements = () => {
     cardsContainer = document.querySelector("#container-cards");
     loadingOverlay = document.getElementById("loading-overlay");
     userName = document.getElementById("user-name");
+    navbar = document.getElementById("navigation");
 }
 
 const addEventListeners = () => {
@@ -76,13 +78,21 @@ const getGames = async () => {
 const displayData = (data) => {
     let cardsHTML = "";
 
+    if(userRol == 'sysadmin'){
+        navbar.innerHTML += 
+        `<li>
+            <a href="usersPanel.html" class="navbar__link">Usuarios</a>
+        </li>`;
+    }
+
     // Determine the media URL based on the media_type
     data.forEach((element) => {
         // Build the HTML for each card
-
+        let deleteControl = "";
         const encodedDescription = encodeURIComponent(element.descripcion);
-        const permission = userRol == "admin" ? "block" : "none";
-        const deleteFunc = userRol == "admin" ? `deleteCard({id: '${element.id}'})` : "";
+        if(userRol == "admin" || userRol == "sysadmin"){
+            deleteControl = `<img src="./assets/images/delete.svg" alt="delete-button" class="delete-${element.id}" id="delete" onclick="deleteCard({id: '${element.id}'})">`;
+        }
 
         cardsHTML += `<div class="card" id="card-${element.id}">
           <img src="${element.imagen}" alt="Game image">
@@ -96,7 +106,7 @@ const displayData = (data) => {
                 <p class="phone">Contact: ${element.telefono}</p>
               </div>
               <div class="card-actions">
-                <img src="./assets/images/delete.svg" alt="delete-button" class="delete-${element.id}" id="delete" onclick="${deleteFunc}" style="display: ${permission}">
+                ${deleteControl}
               </div>
             </div>
           </div>
@@ -111,9 +121,9 @@ const deleteCard = async ({id}) => {
     loading(false);
 
     try {
-        if(userRol == "admin"){
+        if(userRol == "admin" || userRol == "sysadmin"){
             const response = await fetch(urlWithParams, {
-                method: 'GET',
+                method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -124,7 +134,8 @@ const deleteCard = async ({id}) => {
                 const card = document.querySelector("#card-".concat(id));
                 card.style.display = "none";
                 loading(true);
-    
+                alert("Publicacion eliminada correctamente");
+
             } else if (response.status === 400 || response.status === 404) {
     
                 // Throws an error with the API's error message.

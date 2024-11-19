@@ -94,9 +94,7 @@ const publishFunct = async (e) => {
 
         if (response.ok) {
 
-            const userData = await response.json(); // Parse the response as JSON
-            userRole = userData.role;
-            userName.innerText = userData.nombre;
+            alert("Publicacion creada exitosamente");
             loading(true);
 
         } else if (response.status === 400 || response.status === 404) {
@@ -227,9 +225,7 @@ const modifyFunc = async (e) => {
 
         if (response.ok) {
 
-            const userData = await response.json(); // Parse the response as JSON
-            userRole = userData.role;
-            userName.innerText = userData.nombre;
+            alert("Publicacion modificada exitosamente");
             loading(true);
 
         } else if (response.status === 400 || response.status === 404) {
