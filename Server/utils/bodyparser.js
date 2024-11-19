@@ -30,7 +30,7 @@ async function bodyParser(req, res) {
             return reject(false);
         }
     })
-    return bool;
+    return bool
 }
 
 module.exports = { bodyParser };
