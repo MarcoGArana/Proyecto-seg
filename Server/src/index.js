@@ -26,8 +26,6 @@ const server = http.createServer(async (req, res) => {
                         videojuego.selectAll(req, res);
                     }
                 }
-            } else if (url == "/login/") {
-                user.login(req, res);
             } else if (url == "/whoami/") {
                 if (await auth.authentication(req, res)) {
                     user.whoAmI(req, res);
@@ -50,6 +48,8 @@ const server = http.createServer(async (req, res) => {
                         videojuego.save(req, res);
                     }
                 }
+            } else if (url == "/login/") {
+                user.login(req, res);
             }
 
             break;
