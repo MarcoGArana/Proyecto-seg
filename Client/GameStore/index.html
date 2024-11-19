@@ -1,64 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device=width, initial-scale=1.0">
     <title>Eneba</title>
-    <link rel="stylesheet" href="./assets/css/style.css" />
-    <link rel="icon" href="./assets/img/favicon.ico" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;600&display=swap" />
+    <link rel="stylesheet" href="assets/css/loginRegisterStyles.css">
 </head>
-
 <body>
-    <!-- Header -->
-    <header class="header container">
-        <div class="header__conf">
-            <div class="header__wrapper">
-                <img src="./assets/images/logoFull.svg" style="max-width: 12rem;" alt="enebaLogo">
-                <a href="profile.html">
-                    <h3 id="user-name"></h3>
-                </a>
+
+    <main>
+        <img src="./assets/images/logoFull.svg" style="max-width: 12rem;" alt="enebaLogo" class="logo">
+        <div class="container__todo">
+            <div class="caja__trasera">
+                <div class="caja__trasera-login">
+                    <h3>¿Ya tienes una cuenta?</h3>
+                    <p>Inicia sesión para entrar en la página</p>
+                    <button id="btn__iniciar-sesion">Iniciar Sesión</button>
+                </div>
+                <div class="caja__trasera-register">
+                    <h3>¿Aún no tienes cuenta?</h3>
+                    <p>Regístrate para que puedas iniciar sesión</p>
+                    <button id="btn__registrarse">Registrarse</button>
+                </div>
             </div>
 
+            <div class="contenedor__login-register">
+
+                <form action="" class="formulario__login">
+                    <h2>Iniciar Sesión</h2>
+                    <input type="text" name="identifier" placeholder="Correo o Usuario">
+                    <input type="password" name="password" placeholder="Contraseña">
+                    <button type="submit">Entrar</button>
+                </form>
+            
+                <form action="" class="formulario__register">
+                    <h2>Registrarse</h2>
+                    <input type="email" name="correo" placeholder="Correo electrónico">
+                    <input type="text" name="nombre" placeholder="Nombre de usuario">
+                    <input type="text" name="telefono" placeholder="Número de teléfono">
+                    <input type="password" name="password" placeholder="Contraseña">
+                    <button type="submit">Registrarse</button>
+                </form>
+            </div>
         </div>
-        <nav class="navbar">
-            <ul class="navbar__list container" id="navigation">
-                <li>
-                    <a href="#" class="navbar__link active">Tienda</a>
-                </li>
-                <li>
-                    <a href="publishItem.html" class="navbar__link">Publicacion</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <!-- Main -->
-    <main>
-        <!-- Controls menu -->
 
-        <section class="image-section" role="status" aria-live="polite" aria-relevant="additions">
-            <h2 class="sr-only">
-                Games
-            </h2>
-            <!-- Card  List -->
-            <ul class="card-list container" id="container-cards">
-                <!-- NOTE: Your generated images will appear here. -->
-
-                <!-- Default element. -->
-            </ul>
-        </section>
     </main>
-
-    <!-- Loading GIF div -->
-    <div id="loading-overlay" class="loading-overlay">
-        <img src="./assets/images/loading.gif" alt="Loading..." />
-    </div>
-    
-    <script src="./assets/js/functionalities/apiGetGames.js"></script>
-</body>
-
+    <script src="assets/js/functionalities/loginAndRegister.js"></script>
+</body> 
 </html>
