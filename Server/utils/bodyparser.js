@@ -8,8 +8,8 @@ async function bodyParser(req, res) {
                 })
                 .on("end", () => {
                     try{
-                    req.body = JSON.parse(totalData);
-                    return resolve(true);
+                        req.body = JSON.parse(totalData);
+                        return resolve(true);
                     }catch{
                         res.writeHead(409, { "content-type": "application/json" });
                         res.write(JSON.stringify({ message: "Datos recibidos de forma incorrecta" }));
