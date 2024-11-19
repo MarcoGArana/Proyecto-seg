@@ -11,6 +11,7 @@ var caja_trasera_register = document.querySelector(".caja__trasera-register");
 
 const baseURL = "http://localhost:3000";
 
+// Transicion de la seccion de registro
 function registerTransicion(){
     formulario_register.style.display = "block";
     contenedor_login_register.style.left = "410px";
@@ -19,6 +20,7 @@ function registerTransicion(){
     caja_trasera_login.style.opacity = "1";
 }
 
+// Transicion de la seccion de login
 function iniciarSesionTransicion(){
     formulario_register.style.display = "none";
     contenedor_login_register.style.left = "10px";
@@ -33,16 +35,19 @@ function sanitizeInput(input) {
     return div.innerHTML;
 }
 
+// Validacion de correo
 function isValidEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
 }
 
+// Validacion de usuario
 function isValidUsername(input) {
     const regexAlfanumerico = /^[a-zA-Z0-9]+$/;
-    return regexAlfanumerico.test(input); // Devuelve true si el input es válido
+    return regexAlfanumerico.test(input);
 }
 
+// Funcion para obtener el token
 function getToken() {
     return sessionStorage.getItem("token");
 }
@@ -62,11 +67,13 @@ document.querySelector(".formulario__register").addEventListener("submit", async
         return; 
     }
     
+    // Validar el usuario
     if(!isValidUsername(nombre)) {
         alert("El campo de usuario solo permite simbolos alfanumericos y no permite espacios.");
         return;
     }
 
+    // Validar si los campos estan llenos
     if (!nombre || !correo || !telefono || !password) {
         alert("Por favor, completa todos los campos.");
         return;
@@ -81,8 +88,8 @@ document.querySelector(".formulario__register").addEventListener("submit", async
 
         const data = await response.json();
         if (response.ok) {
-            alert(data.message); // Registro exitoso
-
+            alert(data.message); 
+            
             // Limpiar campos del formulario
             e.target.reset();
 
@@ -104,11 +111,13 @@ document.querySelector(".formulario__login").addEventListener("submit", async (e
     const identifier = sanitizeInput(e.target.identifier.value);
     const password = sanitizeInput(e.target.password.value);
 
+    // Validacion de correo o usuario
     if(!isValidEmail(identifier) && !isValidUsername(identifier)){
         alert("Por favor, ingrese un correo o usuario valido.");
         return;
     }
 
+    // Verficiacion que los campos esten llenos
     if (!identifier || !password) {
         alert("Por favor, completa todos los campos.");
         return;
@@ -123,7 +132,6 @@ document.querySelector(".formulario__login").addEventListener("submit", async (e
             }
         );
 
-        // Manejar la respuesta del servidor
         const data = await response.json();
         if (response.ok) {
             // Guardando token en sessionStorage
