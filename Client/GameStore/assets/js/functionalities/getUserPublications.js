@@ -1,13 +1,16 @@
 let cardsContainer = null;
 let loadingOverlay = null;
+let userRol = null;
+let userName = null;
+let userData = null;
 
-let userPosts = null;
-
-const baseUrl = "http://127.0.0.1:5500/GameStore/assets";
+const baseUrl = "http://127.0.0.1:3000";
+const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWV2byIsImV4cCI6MTczMTk3NDQwNiwiaWF0IjoxNzMxODg4MDA2fQ.EXjma5tMz3Y2dEaAuWGG7X2Aq3xppDY7Hbz8m95e5mA";
 
 const bindElements = () => {
     cardsContainer = document.querySelector("#container-cards");
     loadingOverlay = document.getElementById("loading-overlay");
+    userName = document.getElementById("user-name");
 }
 
 const addEventListeners = () => {
@@ -26,11 +29,18 @@ const loading = (complete) => {
 
 const getGames = async () => {
 
-    // const urlWithParams = `${baseUrl}/planetary/apod?${queryParams.toString()}`;
+    const urlWithParams = `${baseUrl}/videogame/`;
+
     try {
+        loading(false);
         // try code
-        const urlWithParams = `${baseUrl}/games.json`;
-        const response = await fetch(urlWithParams);
+        const response = await fetch(urlWithParams, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'content-Type': 'application/json',
+            },
+        });
 
         if (response.ok) {
             const data = await response.json(); // Parse the response as JSON
@@ -69,21 +79,20 @@ const displayData = (data) => {
 
     // Determine the media URL based on the media_type
     data.forEach((element) => {
-        if (userPosts.includes(element.id)) {
-            const encodedDescription = encodeURIComponent(element.description);
-            const editDirection = `publishItem.html?description=${encodedDescription}&title=${element.title}&gameId=${element.id}&action=Save&imgUrl=${element.image}&price=${element.price}&phone=${element.phone}&gameState=${element.state}`
+        if (element.correo == userData.correo && element.usuario == userData.nombre && element.telefono == userData.telefono) {
+            const editDirection = `publishItem.html?id=${element.id}`
 
             cardsHTML += 
             `<div class="card" id="card-${element.id}">
-                <img src="${element.image}" alt="Game image">
+                <img src="${element.imagen}" alt="Game image">
                 <div id="card-info">
-                    <a href="gameInfo.html?description=${encodedDescription}&title=${element.title}&imgUrl=${element.image}&price=${element.price}&phone=${element.phone}&gameState=${element.state}" class="card__link">
-                    ${element.title}
+                    <a href="gameInfo.html?id=${element.id}" class="card__link">
+                    ${element.nombre}
                     </a>
                     <div class="card__data">
                         <div>
-                            <p class="price">${element.price}</p>
-                            <p class="phone">Contact: ${element.phone}</p>
+                            <p class="price">$${element.precio}</p>
+                            <p class="phone">Contact: ${element.telefono}</p>
                         </div>
                         <div class="card-actions">
                             <img src="./assets/images/delete.svg" alt="delete-button" class="delete-${element.id}" id="delete" onclick="deleteCard({id:'${element.id}'})">
@@ -102,12 +111,38 @@ const displayData = (data) => {
 }
 
 const deleteCard = async ({ id }) => {
-    try {
-        const card = document.querySelector("#card-".concat(id));
-        card.style.display = "none";
+    const urlWithParams = `${baseUrl}/videogame?id=${id}`;
+    loading(false);
 
-        // TODO: delete game from database
+    try {
+            const response = await fetch(urlWithParams, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.ok) {
+                const card = document.querySelector("#card-".concat(id));
+                card.style.display = "none";
+                loading(true);
+                alert("Publicacion eliminada correctamente");
+    
+            } else if (response.status === 400 || response.status === 404) {
+    
+                // Throws an error with the API's error message.
+                const errorData = await response.json();
+                throw new Error(`The request was not successful: ${errorData.msg}`);
+    
+            } else {
+    
+                // Throws a general error 
+                throw new Error(`The request was not successful`);
+            }
+        
     } catch (error) {
+        loading(true);
         showErrorAlert(error);                      // Display an error using a function declared later
         console.error("An error occurred:", error); // Show the error in the console
     }
@@ -116,13 +151,21 @@ const deleteCard = async ({ id }) => {
 
 const getUserData = async () => {
     try {
-        const urlWithParams = `${baseUrl}/user.json`;
-        const response = await fetch(urlWithParams);
+        loading(false);
+        const urlWithParams = `${baseUrl}/whoami/`;
+        const response = await fetch(urlWithParams, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
 
         if (response.ok) {
 
-            const userData = await response.json(); // Parse the response as JSON
-            userPosts = userData.posts;
+            const userDataResponse = await response.json(); // Parse the response as JSON
+            userData = userDataResponse;
+            userName.innerText = userDataResponse.nombre;
 
         } else if (response.status === 400 || response.status === 404) {
 
@@ -136,6 +179,7 @@ const getUserData = async () => {
             throw new Error(`The request was not successful`);
         }
     } catch (error) {
+        loading(true);
         showErrorAlert(error);                      // Display an error using a function declared later
         console.error("An error occurred:", error); // Show the error in the console
     }
@@ -146,8 +190,8 @@ const showErrorAlert = (msg) => {
 }
 
 const main = () => {
-    getUserData();
     bindElements();
+    getUserData();
     addEventListeners();
     getGames();
 }

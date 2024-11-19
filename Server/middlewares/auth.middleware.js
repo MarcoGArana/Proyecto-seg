@@ -48,7 +48,7 @@ middlewares.authentication = async (req, res) => {
         }
         const userName = payload.sub;
         let user;
-        let sql = "SELECT usuario.contrasena, usuario.correo,usuario.nombre,usuario.telefono, rol.rol FROM usuario, rol where usuario.rol=rol.id AND usuario.nombre= " + mysql.escape(userName);
+        let sql = "SELECT USUARIO.contrasena, USUARIO.correo,USUARIO.nombre,USUARIO.telefono, ROL.rol FROM USUARIO, ROL where USUARIO.rol=ROL.id AND USUARIO.nombre= " + mysql.escape(userName);
         user = await new Promise((resolve,reject)=>con.query(sql, function (err, result) {
             if (err) return reject(err);
             return resolve(result[0]);
