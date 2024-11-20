@@ -1,13 +1,18 @@
 let formContainer = null;
 let loadingOverlay = null;
-let userRole = null;
+let userRol = null;
 let form = null;
 let userName = null;
 //From fields
 let userNameInput = null;
 
+// Funcion para obtener el token
+function getToken() {
+    return sessionStorage.getItem("token");
+}
+
 const baseUrl = "http://127.0.0.1:3000";
-const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWV2byIsImV4cCI6MTczMTk3NDQwNiwiaWF0IjoxNzMxODg4MDA2fQ.EXjma5tMz3Y2dEaAuWGG7X2Aq3xppDY7Hbz8m95e5mA";
+const token = getToken();
 
 const bindElements = () => {
     formContainer = document.querySelector("#form-container");
@@ -117,7 +122,7 @@ const getUserData = async () => {
         if (response.ok) {
 
             const userData = await response.json(); // Parse the response as JSON
-            userRole = userData.role;
+            userRol = userData.rol;
             userName.innerText = userData.nombre;
             loading(true);
 

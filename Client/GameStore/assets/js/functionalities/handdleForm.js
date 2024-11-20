@@ -1,21 +1,28 @@
 let formContainer = null;
 let loadingOverlay = null;
 let photoLabel = null;
-let userRole = null;
+let userRol = null;
 let form = null;
 let base64Image = null;
 let userName = null;
 let postData = null;
+let navbar = null;
 //From fields
 let titleInput, descriptionInput, imageUploadInput, priceInput, stateInput, categoryInput = null;
 
+// Funcion para obtener el token
+function getToken() {
+    return sessionStorage.getItem("token");
+}
+
 const baseUrl = "http://127.0.0.1:3000";
-const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWV2byIsImV4cCI6MTczMTk3NDQwNiwiaWF0IjoxNzMxODg4MDA2fQ.EXjma5tMz3Y2dEaAuWGG7X2Aq3xppDY7Hbz8m95e5mA";
+const token = getToken();
 
 const bindElements = () => {
     formContainer = document.querySelector("#form-container");
     loadingOverlay = document.getElementById("loading-overlay");
     userName = document.getElementById("user-name");
+    navbar = document.getElementById("navigation");
 }
 
 const bindFormElements = () => {
@@ -142,7 +149,7 @@ const getCategoryNumber = (categoryName) => {
         "Musica y Ritmo",
         "Sandbox o Mundo Abierto",
         "Multijugador en linea",
-        "Realidad Virtual (VR)",
+        "Realidad Virtual",
         "Survival",
         "Party Games",
         "Puzzle"
@@ -166,7 +173,7 @@ const modifyFunc = async (e) => {
     const categoryValue = getCategoryNumber(postData.categoria);
 
     const state = stateInput.selectedIndex == 0 ? stateValue : stateInput.selectedIndex;
-    const category = categoryInput.selectedIndex == 0 ? categoryValue : categoryInput.selectedIndex;
+    const category = categoryInput.selectedIndex == 0 ? categoryValue : categoryInput.selectedIndex;  
     
     // Verificamos si se seleccionó un archivo
     
@@ -294,7 +301,13 @@ function sanitizeHTML(str) {
 
 const getPostData = async() => {
     const url = new URL(window.location.href);
-    const postId = sanitizeHTML(url.searchParams.get("id"));
+    let postId = sanitizeHTML(url.searchParams.get("id"));
+    const integerRegex = /^\d+$/;
+
+    if(!integerRegex.test(postId)){
+        postId = null;
+    }
+
     if (!postId) {
         data = {
             nombre : "",
@@ -347,12 +360,18 @@ const getPostData = async() => {
 }
 
 const displayForm = (data, formAction) => {
+    if(userRol == 'sysadmin'){
+        navbar.innerHTML += 
+        `<li>
+            <a href="usersPanel.html" class="navbar__link">Usuarios</a>
+        </li>`;
+    }
+
     let formHTML = "";
     const title = data.nombre || "";
     const price = data.precio || "";
     const img = data.imagen ? "imagen" : "Seleccione una foto";
     const description = data.descripcion || "";
-    const gameId = data.id || "";
     const state = data.estado || "Estado";
     const category = data.categoria || "Categoria";
     const action =  formAction;
@@ -483,7 +502,7 @@ const getUserData = async () => {
         if (response.ok) {
 
             const userData = await response.json(); // Parse the response as JSON
-            userRole = userData.role;
+            userRol = userData.rol;
             userName.innerText = userData.nombre;
             loading(true);
 
