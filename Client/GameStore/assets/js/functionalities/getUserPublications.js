@@ -3,14 +3,21 @@ let loadingOverlay = null;
 let userRol = null;
 let userName = null;
 let userData = null;
+let navbar = null;
+
+// Funcion para obtener el token
+function getToken() {
+    return sessionStorage.getItem("token");
+}
 
 const baseUrl = "http://127.0.0.1:3000";
-const token = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWV2byIsImV4cCI6MTczMTk3NDQwNiwiaWF0IjoxNzMxODg4MDA2fQ.EXjma5tMz3Y2dEaAuWGG7X2Aq3xppDY7Hbz8m95e5mA";
+const token = getToken();
 
 const bindElements = () => {
     cardsContainer = document.querySelector("#container-cards");
     loadingOverlay = document.getElementById("loading-overlay");
     userName = document.getElementById("user-name");
+    navbar = document.getElementById("navigation");
 }
 
 const addEventListeners = () => {
@@ -76,6 +83,13 @@ const getGames = async () => {
  */
 const displayData = (data) => {
     let cardsHTML = "";
+
+    if(userRol == 'sysadmin'){
+        navbar.innerHTML += 
+        `<li>
+            <a href="usersPanel.html" class="navbar__link">Usuarios</a>
+        </li>`;
+    }
 
     // Determine the media URL based on the media_type
     data.forEach((element) => {
@@ -165,6 +179,7 @@ const getUserData = async () => {
 
             const userDataResponse = await response.json(); // Parse the response as JSON
             userData = userDataResponse;
+            userRol = userDataResponse.rol;
             userName.innerText = userDataResponse.nombre;
 
         } else if (response.status === 400 || response.status === 404) {
