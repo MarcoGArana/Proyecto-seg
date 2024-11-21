@@ -19,6 +19,12 @@ const bindElements = () => {
     navbar = document.getElementById("navigation");
 }
 
+const checkToken = () => {
+    if(!token){
+        window.location.replace("http://localhost:5500/Client/GameStore/");
+    }
+}
+
 const addEventListeners = () => {
     //Enlazar eventos
 }
@@ -202,6 +208,7 @@ const getUserData = async () => {
 }
 
 const main = () => {
+    checkToken();
     bindElements();
     getUserData();
     addEventListeners();

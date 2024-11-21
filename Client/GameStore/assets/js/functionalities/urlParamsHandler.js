@@ -19,6 +19,12 @@ const bindElements = () => {
     navbar = document.getElementById("navigation");
 }
 
+const checkToken = () => {
+    if(!token){
+        window.location.replace("http://localhost:5500/Client/GameStore/");
+    }
+}
+
 function sanitizeHTML(str) {
     const temp = document.createElement('div');
     temp.textContent = str;
@@ -149,6 +155,7 @@ const getUserData = async () => {
 }
 
 const main = () => {
+    checkToken();
     bindElements();
     getUserData();
     getPostData();

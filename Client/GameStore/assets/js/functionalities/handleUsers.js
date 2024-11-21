@@ -14,6 +14,12 @@ function getToken() {
 const baseUrl = "http://127.0.0.1:3000";
 const token = getToken();
 
+const checkToken = () => {
+    if(!token){
+        window.location.replace("http://localhost:5500/Client/GameStore/");
+    }
+}
+
 const bindElements = () => {
     formContainer = document.querySelector("#form-container");
     loadingOverlay = document.getElementById("loading-overlay");
@@ -145,6 +151,7 @@ const getUserData = async () => {
 }
 
 const main = async () => {
+    checkToken();
     bindElements();
     await getUserData();
     bindFormElements();
