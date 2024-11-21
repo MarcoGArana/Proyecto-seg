@@ -21,7 +21,7 @@ const bindElements = () => {
 
 const checkToken = () => {
     if(!token){
-        window.location.replace("http://localhost:5500/Client/GameStore/");
+        window.location.replace("./index.html");
     }
 }
 
@@ -136,6 +136,10 @@ const getUserData = async () => {
             userRol = userData.rol;
             userName.innerText = userData.nombre;
 
+        } else if (response.status === 401) {
+            // Throws an error with the API's error message.
+            window.location.replace("./index.html");
+
         } else if (response.status === 400 || response.status === 404) {
 
             // Throws an error with the API's error message.
@@ -154,11 +158,11 @@ const getUserData = async () => {
     }
 }
 
-const main = () => {
+const main = async () => {
     checkToken();
     bindElements();
-    getUserData();
-    getPostData();
+    await getUserData();
+    await getPostData();
 }
 
 window.onload = main;

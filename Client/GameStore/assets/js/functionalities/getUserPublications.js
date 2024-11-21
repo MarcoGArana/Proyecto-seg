@@ -15,7 +15,7 @@ const token = getToken();
 
 const checkToken = () => {
     if(!token){
-        window.location.replace("http://localhost:5500/Client/GameStore/");
+        window.location.replace("./index.html");
     }
 }
 
@@ -188,6 +188,10 @@ const getUserData = async () => {
             userRol = userDataResponse.rol;
             userName.innerText = userDataResponse.nombre;
 
+        } else if (response.status === 401) {
+            // Throws an error with the API's error message.
+            window.location.replace("./index.html");
+
         } else if (response.status === 400 || response.status === 404) {
 
             // Throws an error with the API's error message.
@@ -210,12 +214,12 @@ const showErrorAlert = (msg) => {
     alert(msg || "An unexpected error occurred");
 }
 
-const main = () => {
+const main = async () => {
     checkToken();
     bindElements();
-    getUserData();
+    await getUserData();
     addEventListeners();
-    getGames();
+    await getGames();
 }
 
 window.onload = main;
