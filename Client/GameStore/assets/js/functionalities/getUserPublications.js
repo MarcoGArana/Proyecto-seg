@@ -13,6 +13,12 @@ function getToken() {
 const baseUrl = "http://127.0.0.1:3000";
 const token = getToken();
 
+const checkToken = () => {
+    if(!token){
+        window.location.replace("http://localhost:5500/Client/GameStore/");
+    }
+}
+
 const bindElements = () => {
     cardsContainer = document.querySelector("#container-cards");
     loadingOverlay = document.getElementById("loading-overlay");
@@ -205,6 +211,7 @@ const showErrorAlert = (msg) => {
 }
 
 const main = () => {
+    checkToken();
     bindElements();
     getUserData();
     addEventListeners();
