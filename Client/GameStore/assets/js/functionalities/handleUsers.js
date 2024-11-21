@@ -16,7 +16,7 @@ const token = getToken();
 
 const checkToken = () => {
     if(!token){
-        window.location.replace("http://localhost:5500/Client/GameStore/");
+        window.location.replace("./index.html");
     }
 }
 
@@ -131,6 +131,10 @@ const getUserData = async () => {
             userRol = userData.rol;
             userName.innerText = userData.nombre;
             loading(true);
+
+        } else if (response.status === 401) {
+            // Throws an error with the API's error message.
+            window.location.replace("./index.html");
 
         } else if (response.status === 400 || response.status === 404) {
 

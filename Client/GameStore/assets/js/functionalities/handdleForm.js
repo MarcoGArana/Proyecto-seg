@@ -20,7 +20,7 @@ const token = getToken();
 
 const checkToken = () => {
     if(!token){
-        window.location.replace("http://localhost:5500/Client/GameStore/");
+        window.location.replace("./index.html");
     }
 }
 
@@ -315,7 +315,7 @@ const getPostData = async() => {
     }
 
     if (!postId) {
-        data = {
+        const data = {
             nombre : "",
             precio : "",
             imagen : "Seleccione una foto",
@@ -342,8 +342,23 @@ const getPostData = async() => {
                 const data = await response.json(); // Parse the response as JSON
                 loading(true);                      // Hide the loading overlay
                 postData = data[0];
-                base64Image = data[0].imagen;
-                displayForm(data[0], "Modificar");               // Display the data on the card
+                
+                if(!postData || postData.usuario != userName.innerText){
+                    postData = null;
+                    const formData = {
+                        nombre : "",
+                        precio : "",
+                        imagen : "Seleccione una foto",
+                        descripcion : "",
+                        id : "",
+                        estado : "Estado",
+                        categoria : "Categoria",
+                    }
+                    displayForm(formData, "Publicar");
+                }else{
+                    base64Image = data[0].imagen;
+                    displayForm(data[0], "Modificar");               // Display the data on the card
+                }
 
             } else if (response.status === 400 || response.status === 404) {
 
@@ -511,6 +526,10 @@ const getUserData = async () => {
             userRol = userData.rol;
             userName.innerText = userData.nombre;
             loading(true);
+
+        }else if (response.status === 401) {
+            // Throws an error with the API's error message.
+            window.location.replace("./index.html");
 
         } else if (response.status === 400 || response.status === 404) {
 

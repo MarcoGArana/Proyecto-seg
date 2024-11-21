@@ -140,7 +140,7 @@ document.querySelector(".formulario__login").addEventListener("submit", async (e
             alert("Login exitoso. Redirigiendo a la pagina principal");
             
             // Redirigir a la pagina principal
-            window.location.replace("http://localhost:5500/Client/GameStore/mainScreen.html");
+            window.location.replace("./mainScreen.html");
         } else {
             alert(data.error || "Error al iniciar sesión. Compruebe sus credenciales");
         }
