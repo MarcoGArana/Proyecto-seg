@@ -9,7 +9,7 @@ var contenedor_login_register = document.querySelector(".contenedor__login-regis
 var caja_trasera_login = document.querySelector(".caja__trasera-login");
 var caja_trasera_register = document.querySelector(".caja__trasera-register");
 
-const baseURL = "http://localhost:3000";
+const baseURL = `${CONFIG.API_BASE_URL}`;
 
 // Transicion de la seccion de registro
 function registerTransicion(){
