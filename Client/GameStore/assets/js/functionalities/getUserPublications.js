@@ -4,6 +4,7 @@ let userRol = null;
 let userName = null;
 let userData = null;
 let navbar = null;
+let closeSession = null;
 
 // Funcion para obtener el token
 function getToken() {
@@ -24,10 +25,15 @@ const bindElements = () => {
     loadingOverlay = document.getElementById("loading-overlay");
     userName = document.getElementById("user-name");
     navbar = document.getElementById("navigation");
+    closeSession = document.getElementById("cerrar-sesion");
 }
 
 const addEventListeners = () => {
     //Enlazar eventos
+    closeSession.addEventListeners("click", () => {
+        sessionStorage.token = null;
+        window.location.replace("./index.html");
+    });
 }
 
 const loading = (complete) => {

@@ -45,7 +45,7 @@ const getPostData = async() => {
     const url = new URL(window.location.href);
     const postId = sanitizeHTML(url.searchParams.get("id"));
     if (!postId) {
-        window.location.replace("http://localhost:5500/index.html");
+        window.location.replace("./index.html");
     }
 
     const urlWithParams = `${baseUrl}/videogame?id=${postId}`;

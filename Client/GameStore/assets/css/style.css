@@ -555,3 +555,21 @@ main {
     text-align: center; 
     width: max-content;
 }
+
+.logo {
+    max-width: 12rem;    
+}
+
+.publicItemTittle {
+    text-align: center; 
+    padding: 2rem;
+}
+
+.input-image {
+    display: none;
+}
+
+footer {
+    display: flex;
+    justify-content: center;
+}

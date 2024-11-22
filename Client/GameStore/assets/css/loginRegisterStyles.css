@@ -21,6 +21,7 @@ main {
 }
 
 .logo {
+    max-width: 12rem;
     margin-bottom: 100px;
 }
 

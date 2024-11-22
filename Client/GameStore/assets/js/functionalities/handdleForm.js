@@ -399,7 +399,7 @@ const displayForm = (data, formAction) => {
     const formTitle = action == "publicar" ? "Publica tus juegos para venderlos" : "Modifica tus publicaciones";
 
     formHTML += `
-        <h2 style="text-align: center; padding: 2rem;">¡${formTitle}!</h2>
+        <h2 class="publicItemTittle">¡${formTitle}!</h2>
         <form id="form" class="form">
                     <div class="form__field">
                         <input
@@ -451,7 +451,7 @@ const displayForm = (data, formAction) => {
                             id="from-photo"
                             name="from-photo"
                             accept='.jpg, .png, .jpeg'
-                            style="display:none;"
+                            class="input-image"
                         />
                     </div>
 
